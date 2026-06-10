@@ -140,14 +140,14 @@ async function sendMessage() {
     appendMessage("⏳ Please wait, waking up the server...", 'bot-msg');
 
     try {
-        const JAVA_URL = window.location.hostname === 'localhost' 
-            ? 'http://localhost:8080' 
-            : 'https://diana-java-gateway.onrender.com';
+        const PYTHON_URL = window.location.hostname === 'localhost'
+            ? 'http://localhost:8000'
+            : 'https://diana-python-ai.onrender.com';
 
         const controller = new AbortController();
         const timeout = setTimeout(() => controller.abort(), 60000); // 60 seconds
 
-        const response = await fetch(`${JAVA_URL}/api/portfolio-chat`, {
+        const response = await fetch(`${PYTHON_URL}/api/chat`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ message: text }),

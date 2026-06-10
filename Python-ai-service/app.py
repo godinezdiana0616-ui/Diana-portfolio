@@ -12,7 +12,7 @@ load_dotenv()
 
 app = FastAPI(title="Diana's Portfolio AI Microservice")
 
-# CORS Setup para makakonekta ang Java Backend mo
+# CORS Setup para makakonekta ang Portfolio UI at browser
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
