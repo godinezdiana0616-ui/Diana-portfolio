@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api")
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = {"https://diana-portfolio-chi.vercel.app", "http://localhost"})
 public class ChatController {
 
     private static final String PYTHON_SERVICE_URL = "https://diana-python-ai.onrender.com/api/chat";
