@@ -36,7 +36,7 @@ class ChatRequest(BaseModel):
 
 @app.get("/")
 def read_root():
-    return {"status": "Buhay na buhay ang Python AI server mo, Diana!"}
+    return {"status": "Python are open"}
 
 @app.post("/api/chat")
 async def chat_endpoint(request: ChatRequest):
