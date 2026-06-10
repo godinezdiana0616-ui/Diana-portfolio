@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin(origins = "*")
 public class ChatController {
 
-    private static final String PYTHON_SERVICE_URL = "http://localhost:8000/api/chat";
+    private static final String PYTHON_SERVICE_URL = "https://diana-python-ai.onrender.com/api/chat";
 
     @PostMapping("/portfolio-chat")
     public String handleUserChat(@RequestBody Map<String, String> payload) {
