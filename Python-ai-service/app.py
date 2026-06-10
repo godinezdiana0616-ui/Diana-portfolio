@@ -6,7 +6,6 @@ from dotenv import load_dotenv
 # 1. Eto ang bagong paraan ng pag-import
 from google import genai
 from google.genai import types
-from fastapi import FastAPI, HTTPException, Header
 
 # Basahin ang .env file
 load_dotenv()

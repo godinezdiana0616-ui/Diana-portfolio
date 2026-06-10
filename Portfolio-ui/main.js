@@ -156,18 +156,19 @@ async function sendMessage() {
 
         clearTimeout(timeout);
 
-        if (!response.ok) {
-            appendMessage(`Server error: ${response.status}`, 'bot-msg');
+        const responseBody = await response.json();
+        const loadingNode = chatMessages.lastChild;
+        if (loadingNode && loadingNode.classList.contains('bot-msg') && loadingNode.innerText.includes('Please wait')) {
+            loadingNode.remove();
+        }
+
+        if (response.ok && responseBody && responseBody.response) {
+            appendMessage(responseBody.response, 'bot-msg');
             return;
         }
 
-        const data = await response.json();
-
-        if (data && data.response) {
-            // Remove loading message
-            chatMessages.lastChild.remove();
-            appendMessage(data.response, 'bot-msg');
-        }
+        const errorMsg = responseBody?.error || `Server error: ${response.status}`;
+        appendMessage(errorMsg, 'bot-msg');
     } catch (error) {
         if (error.name === 'AbortError') {
             appendMessage("Server is still waking up. Please try again!", 'bot-msg');
