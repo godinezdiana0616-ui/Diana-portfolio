@@ -135,41 +135,45 @@ async function sendMessage() {
     const text = chatInput.value.trim();
     if(!text) return;
 
-    // Isulat ang text ng user sa UI chat box
     appendMessage(text, 'user-msg');
     chatInput.value = '';
+    appendMessage("⏳ Please wait, waking up the server...", 'bot-msg');
 
     try {
-        // TATAWAGAN ANG JAVA GATEWAY 
-        // Direktang ituro muna sa Python para sa testing:
         const JAVA_URL = window.location.hostname === 'localhost' 
-    ? 'http://localhost:8080' 
-    : 'https://diana-java-gateway.onrender.com';
+            ? 'http://localhost:8080' 
+            : 'https://diana-java-gateway.onrender.com';
 
-        
-    const response = await fetch(`${JAVA_URL}/api/portfolio-chat`, {
+        const controller = new AbortController();
+        const timeout = setTimeout(() => controller.abort(), 60000); // 60 seconds
+
+        const response = await fetch(`${JAVA_URL}/api/portfolio-chat`, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json; charset=utf-8' },
-            body: JSON.stringify({ message: text })
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ message: text }),
+            signal: controller.signal
         });
 
-        // DAGDAG NA CHECK
+        clearTimeout(timeout);
+
         if (!response.ok) {
-            appendMessage(`Server error: ${response.status} - ${response.statusText}`, 'bot-msg');
+            appendMessage(`Server error: ${response.status}`, 'bot-msg');
             return;
         }
 
         const data = await response.json();
 
         if (data && data.response) {
+            // Remove loading message
+            chatMessages.lastChild.remove();
             appendMessage(data.response, 'bot-msg');
-        } else if (data && data.error) {
-            appendMessage("Error: " + data.error, 'bot-msg');
-        } else {
-            appendMessage("Sorry, I didn't get a proper response.", 'bot-msg');
         }
     } catch (error) {
-        appendMessage("Sorry, I'm having trouble connecting to the backend server.", 'bot-msg');
+        if (error.name === 'AbortError') {
+            appendMessage("Server is still waking up. Please try again!", 'bot-msg');
+        } else {
+            appendMessage("Sorry, I'm having trouble connecting.", 'bot-msg');
+        }
     }
 }
 
