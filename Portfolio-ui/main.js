@@ -142,9 +142,14 @@ async function sendMessage() {
     try {
         // TATAWAGAN ANG JAVA GATEWAY 
         // Direktang ituro muna sa Python para sa testing:
-        const response = await fetch('http://localhost:8080/api/portfolio-chat', {
+        const JAVA_URL = window.location.hostname === 'localhost' 
+    ? 'http://localhost:8080' 
+    : 'https://diana-java-gateway.onrender.com';
+
+        
+    const response = await fetch(`${JAVA_URL}/api/portfolio-chat`, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 'Content-Type': 'application/json; charset=utf-8' },
             body: JSON.stringify({ message: text })
         });
 
